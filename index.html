@@ -432,49 +432,41 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			(function() {
 			    const username = 'belse666'; 
 			    const container = document.getElementById('repos-container');
-			    const reposAExcluir = ['belse666' , 'portafolio']; 
+			    
+			    
+			    const proyectosA_Mostrar = [
+			        'Telecom-Retention-AI-Sistema-Inteligente-de-Prediccion-de-Churn',
+			        'Plataforma-Analitica-Interactiva-para-Exploracion-de-Datos-Automotrices',
+			        'IceGames-Analytics-Inteligencia-de-Mercado-y-Modelado-Predictivo-para-la-Industria-de-Videojuegos'
+			    ]; 
 			
-			    fetch('https://api.github.com/users/' + username + '/repos?sort=updated&per_page=12')
+			    fetch('https://api.github.com/users/' + username + '/repos?sort=updated')
 			        .then(response => response.json())
 			        .then(repos => {
 			            if (!container) return;
 			            container.innerHTML = ''; 
 			
 			            repos
-			                .filter(repo => !reposAExcluir.includes(repo.name))
-			                .slice(0, 6) 
+			                .filter(repo => proyectosA_Mostrar.includes(repo.name))
 			                .forEach(repo => {
 			                    const article = document.createElement('article');
 			                    article.className = 'col-6 col-12-xsmall work-item';
 			                    
-			                    const img1 = 'images/thumbs/' + repo.name + '.jpg';
-			                    const img2 = 'images/thumbs/' + repo.name + '-2.jpg';
-			                    const fallback = 'https://githubassets.com' + username + '/' + repo.name;
+			                    
+			                    const imagenFija = 'https://githubassets.com' + username + '/' + repo.name;
 			
+			                   
 			                    article.innerHTML = `
-			                        <a href="${repo.html_url}" target="_blank" class="image fit thumb">
-			                            <img src="${img1}" 
+			                        <a href="${repo.html_url}" target="_blank" class="image fit">
+			                            <img src="${imagenFija}" 
 			                                 alt="${repo.name}" 
-			                                 id="img-${repo.id}"
-			                                 style="border-radius: 8px; transition: all 0.3s;" />
+			                                 style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
 			                        </a>
 			                        <h3 style="margin-top: 10px;">${repo.name.replace(/-/g, ' ')}</h3>
 			                        <p>${repo.description || 'Proyecto desarrollado en GitHub.'}</p>
 			                    `;
 			                    
 			                    container.appendChild(article);
-			
-			                   
-			                    const imagenElemento = document.getElementById(`img-${repo.id}`);
-			                    
-			                    imagenElemento.onmouseover = () => { imagenElemento.src = img2; };
-			                    imagenElemento.onmouseout = () => { imagenElemento.src = img1; };
-			                    
-			                   
-			                    imagenElemento.onerror = () => { 
-			                        imagenElemento.src = fallback;
-			                        imagenElemento.onmouseover = null; 
-			                    };
 			                });
 			        })
 			        .catch(error => console.error('Error:', error));
